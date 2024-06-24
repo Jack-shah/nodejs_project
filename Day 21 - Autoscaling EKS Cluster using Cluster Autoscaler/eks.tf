@@ -66,6 +66,9 @@ module "eks" {
       }
       force_update_version = true
     }
+    tags = {
+      "karpenter.sh/discovery" = "${var.name}"
+    }
   }
 }
 
