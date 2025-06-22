@@ -42,28 +42,22 @@ or
 
 
 
-# Start from Ubuntu
-FROM ubuntu:latest
-
-# Set working directory
+# Stage 1: Build the app
+FROM awajid3/npmnodegit:1.0.0 AS build
+USER root
 WORKDIR /app
+COPY . .
+RUN npm install && npm run build
 
-# Install dependencies (Node.js + npm)
-RUN apt-get update && \
-    apt-get install -y curl ca-certificates && \
-    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
-    apt-get install -y nodejs && \
-    apt-get clean
 
-# Copy the built app
-COPY dist/ .
-
-# Expose the port your app runs on (optional, if needed)
-EXPOSE 3000
-
-# Run the app
-ENTRYPOINT ["node", "src/index.js"]
-
+# Stage 2: Runtime image
+FROM awajid3/npmnodegit:1.0.0 AS runtime
+USER root
+WORKDIR /app
+# Copy only the built files
+COPY --from=build /app/dist /app
+EXPOSE 18000
+ENTRYPOINT ["node", "/app/src/index.js"]
 
 
 
