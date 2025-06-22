@@ -11,6 +11,7 @@ RUN the target........ npm run build........
 As output  i got a /dist folder in my project root 
 
 /dist/src/index.js...................... is main file which is executed for running the app
+also we may need dependencies ( which are installed in node_modules) folder...............
 
 for this we can locally check if its working by running   # node dist/src/index.js                this will give you aurl to access the website
 
