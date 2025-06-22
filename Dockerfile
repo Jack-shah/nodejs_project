@@ -1,17 +1,31 @@
-# Stage 1: Build the app
+#stage 1: Build the app
 FROM awajid3/npmnodegit:1.0.0 AS build
+
+# Set user and working directory
 USER root
 WORKDIR /app
+
+# Copy the entire project
 COPY . .
-RUN npm install && npm run build
+
+# Install dependencies and build
+RUN cd nodejs-application && \
+    npm install && \
+    npm run build
 
 
-# Stage 2: Runtime image
+# 🚀 Stage 2: Runtime image
 FROM awajid3/npmnodegit:1.0.0 AS runtime
+
 USER root
 WORKDIR /app
-# Copy only the built files
-# here we only copy what in deist folder  we might need to copy the node_module folder as well 
-COPY --from=build /app/dist /app                
+
+# Copy only the built app from build stage
+COPY --from=build /app/nodejs-application/node_modules /app/node_modules
+COPY --from=build /app/nodejs-application/dist /app/dist
+
+# Expose the port your app uses
 EXPOSE 18000
-ENTRYPOINT ["node", "/app/src/index.js"]
+
+# Run the app
+ENTRYPOINT ["node", "/app/dist/src/index.js"]
