@@ -26,13 +26,13 @@ app.use(routes);
 
 //start http server
 const httpServer = http.createServer(app);
-httpServer.listen(port);
+httpServer.listen(port, '0.0.0.0');
 console.log(`[${serviceName}] http server listening at port ${port}`);
 
 //start https server
 if(isHttps) {
   const httpsServer = https.createServer(credentials, app);
-  httpsServer.listen(port+1);
+  httpsServer.listen(port+1, '0.0.0.0'); // trying to access theapplictaion fron anywhere
   console.log(`[${serviceName}] https server listening at port ${port + 1}`);
 }
 
